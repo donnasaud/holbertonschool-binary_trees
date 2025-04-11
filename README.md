@@ -2495,13 +2495,5 @@ alex@/tmp/binary_trees$ valgrind ./134-heap_sort
 alex@/tmp/binary_trees$
 ```
 
-### [41. Big O #Binary Heap](./135-O)
-What are the average time complexities of those operations on a Binary Heap (one answer per line):
-*    Inserting the value n
-*    Extracting the root node
-*    Searching for a node in a binary heap of size n
----
-## Authors
-
-* **Robinson Montes** - [mecomonteshbtn](https://github.com/mecomonteshbtn)
-* **Cristian Pineda** - [Cristiand187](https://github.com/Cristiand187)
+Abdullatif Alzaher 
+Donna Almadani
