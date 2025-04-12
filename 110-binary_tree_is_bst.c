@@ -17,7 +17,7 @@ int is_bst_helper(const binary_tree_t *tree, int min, int max)
 		return (0);
 
 	return (is_bst_helper(tree->left, min, tree->n) &&
-	        is_bst_helper(tree->right, tree->n, max));
+		is_bst_helper(tree->right, tree->n, max));
 }
 
 /**
