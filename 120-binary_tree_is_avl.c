@@ -3,7 +3,11 @@
 #include <limits.h> /* for INT_MIN and INT_MAX */
 
 /**
- * max - returns the maximum of two numbers
+ * max - Returns the maximum of two integers
+ * @a: First integer
+ * @b: Second integer
+ *
+ * Return: The greater of a and b
  */
 int max(int a, int b)
 {
@@ -11,7 +15,10 @@ int max(int a, int b)
 }
 
 /**
- * height - measures the height of a binary tree
+ * height - Measures the height of a binary tree
+ * @tree: Pointer to the root node of the tree to measure
+ *
+ * Return: Height of the tree. If tree is NULL, returns 0
  */
 int height(const binary_tree_t *tree)
 {
@@ -21,7 +28,12 @@ int height(const binary_tree_t *tree)
 }
 
 /**
- * is_bst - checks if a binary tree is a valid BST
+ * is_bst - Checks if a binary tree is a valid Binary Search Tree
+ * @tree: Pointer to the root node of the tree to check
+ * @min: Minimum valid value for the current subtree
+ * @max: Maximum valid value for the current subtree
+ *
+ * Return: 1 if tree is a valid BST, otherwise 0
  */
 int is_bst(const binary_tree_t *tree, int min, int max)
 {
@@ -34,7 +46,10 @@ int is_bst(const binary_tree_t *tree, int min, int max)
 }
 
 /**
- * binary_tree_is_avl - checks if a binary tree is a valid AVL tree
+ * binary_tree_is_avl - Checks if a binary tree is a valid AVL Tree
+ * @tree: Pointer to the root node of the tree to check
+ *
+ * Return: 1 if tree is a valid AVL Tree, 0 otherwise
  */
 int binary_tree_is_avl(const binary_tree_t *tree)
 {
