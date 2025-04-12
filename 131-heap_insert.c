@@ -1,92 +1,103 @@
 #include "binary_trees.h"
+#include <stdlib.h>
 
 /**
- * heapify_up - Reorders nodes to maintain heap property after insertion.
- * @node: Pointer to the newly inserted node.
+ * height - Measures the height of a binary tree
+ * @tree: Pointer to the root node
+ * Return: Height or 0 if NULL
  */
-void heapify_up(heap_t *node)
+static size_t height(const binary_tree_t *tree)
 {
-	int temp;
+	size_t left;
+	size_t right;
 
-	while (node->parent && node->n > node->parent->n)
-	{
-		temp = node->n;
-		node->n = node->parent->n;
-		node->parent->n = temp;
-		node = node->parent;
-	}
-}
-
-/**
- * tree_size - Measures the size of a binary tree.
- * @tree: Pointer to the root.
- * Return: Size (number of nodes).
- */
-size_t tree_size(const binary_tree_t *tree)
-{
 	if (!tree)
 		return (0);
-	return (1 + tree_size(tree->left) + tree_size(tree->right));
+
+	left = height(tree->left);
+	right = height(tree->right);
+	return ((left > right ? left : right) + 1);
 }
 
 /**
- * get_insert_parent - Finds the parent where the new node should be inserted.
- * @root: Pointer to the root node.
- * @index: Index of the new node in level order.
- * Return: Pointer to the parent node.
+ * is_perfect - Checks if a binary tree is perfect
+ * @tree: Pointer to the root
+ * Return: 1 if perfect, 0 otherwise
  */
-heap_t *get_insert_parent(heap_t *root, size_t index)
+static int is_perfect(const binary_tree_t *tree)
 {
-	size_t path[64], depth = 0;
-	heap_t *parent = root;
-	size_t i;
+	int left_h, right_h;
 
-	while (index > 1)
+	if (!tree)
+		return (0);
+
+	if (!tree->left && !tree->right)
+		return (1);
+	if (!tree->left || !tree->right)
+		return (0);
+
+	left_h = height(tree->left);
+	right_h = height(tree->right);
+
+	return (left_h == right_h &&
+		is_perfect(tree->left) &&
+		is_perfect(tree->right));
+}
+
+/**
+ * insert_node - Recursively inserts a new node in the proper place
+ * @root: Pointer to current root
+ * @value: Value to insert
+ * Return: Pointer to inserted node
+ */
+static heap_t *insert_node(heap_t *root, int value)
+{
+	heap_t *inserted = NULL;
+
+	if (!root->left)
 	{
-		path[depth++] = index % 2;
-		index /= 2;
+		root->left = binary_tree_node(root, value);
+		inserted = root->left;
+	}
+	else if (!root->right)
+	{
+		root->right = binary_tree_node(root, value);
+		inserted = root->right;
+	}
+	else if (!is_perfect(root))
+		inserted = insert_node(root->left, value);
+	else
+		inserted = insert_node(root->right, value);
+
+	while (inserted && inserted->parent && inserted->n > inserted->parent->n)
+	{
+		int tmp = inserted->n;
+
+		inserted->n = inserted->parent->n;
+		inserted->parent->n = tmp;
+		inserted = inserted->parent;
 	}
 
-	for (i = depth - 1; i > 0; i--)
-		parent = (path[i] == 0) ? parent->left : parent->right;
-
-	return (parent);
+	return (inserted);
 }
 
 /**
- * heap_insert - Inserts a value in Max Binary Heap.
- * @root: Double pointer to root node.
- * @value: Value to insert.
- * Return: Pointer to created node, or NULL on failure.
+ * heap_insert - Inserts a value into a Max Binary Heap
+ * @root: Double pointer to root
+ * @value: Value to insert
+ * Return: Pointer to the inserted node
  */
 heap_t *heap_insert(heap_t **root, int value)
 {
-	heap_t *new, *parent;
-	size_t index;
-
 	if (!root)
 		return (NULL);
 
 	if (!*root)
-		return (*root = binary_tree_node(NULL, value));
+	{
+		*root = binary_tree_node(NULL, value);
+		return (*root);
+	}
 
-	index = tree_size(*root) + 1;
-	parent = get_insert_parent(*root, index);
-	if (!parent)
-		return (NULL);
-
-	if (!(index % 2))
-		parent->left = binary_tree_node(parent, value);
-	else
-		parent->right = binary_tree_node(parent, value);
-
-	new = (index % 2) ? parent->right : parent->left;
-
-	if (!new)
-		return (NULL);
-
-	heapify_up(new);
-
-	return (new);
+	return (insert_node(*root, value));
 }
 
