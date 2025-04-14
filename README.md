@@ -1,4 +1,4 @@
-# 0x1D. C - Binary trees
+# C - Binary trees
 ---
 ## Read or watch:
 
